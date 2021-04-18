@@ -66,3 +66,5 @@ def number_5(session):
         filter(2019 <= Album.year, Album.year <= 2020)
     for record in result:
         print(f"{record.count}")
+
+    # остальные запросы в разработке
