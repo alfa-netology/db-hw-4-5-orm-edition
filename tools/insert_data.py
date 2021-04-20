@@ -2,8 +2,7 @@ import json
 import random
 
 from sqlalchemy import func
-from data.dbase_setup import Performer, Genre, PerformerGenre, Album, PerformerAlbum, Track, TrackCollection, \
-    Collection
+from data.dbase_setup import Performer, Genre, Album, Track, Collection, TrackCollection
 
 def insert(session):
 
@@ -25,15 +24,12 @@ def insert(session):
                 genres[genre] = genres_id
                 genres_id += 1
 
-            genre_id = session.query(Genre).filter_by(title=genre).one().id
-            session.add(PerformerGenre(genre_id=genre_id, performer_id=performer_id))
-
         for album in performer_data.get('albums'):
             album_title = album.get('title').replace("'", "''")
             album_year = album.get('year')
             if album_year != '0':
                 session.add(Album(id=album_id, title=album_title, year=album_year))
-                session.add(PerformerAlbum(album_id=album_id, performer_id=performer_id))
+                session.commit()
 
                 for track in album.get('tracks'):
                     track_title = track.get('title').replace("'", "''")
