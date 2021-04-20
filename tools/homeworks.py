@@ -20,7 +20,7 @@ def number_4(session):
     duration = time_to_milliseconds(minutes=3, seconds=30)
     result = session.query(Track).filter(Track.duration >= duration).order_by(Track.duration.desc()).limit(10).all()
     for record in result:
-        print(f"[{milliseconds_to_time(record.duration)}] :: {record.title}")
+        print(f"[{milliseconds_to_time(record.duration)}] :: {record.title} :: {record.album.title}")
 
     # названия сборников, вышедших в период с 2018 по 2020 год включительно;
     print('\nСборники вышедшие с 2018 по 2020 годы:')

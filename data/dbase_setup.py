@@ -50,6 +50,7 @@ class Track(Base):
     title = Column(String(255), nullable=False)
     duration = Column(Integer, nullable=False)
     album_id = Column(Integer, ForeignKey('albums.id'))
+    album = relationship("Album", backref='tracks')
     collections = relationship("Collection", secondary='track_collection', back_populates="tracks")
 
 class Collection(Base):
