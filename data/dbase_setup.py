@@ -10,6 +10,7 @@ class Performer(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(200), nullable=False, unique=True)
+
     genres = relationship("Genre", secondary='performer_genre', back_populates="performers")
     albums = relationship("Album", secondary='performer_album', back_populates="performers")
 
@@ -18,6 +19,7 @@ class Genre(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String(200), nullable=False, unique=True)
+
     performers = relationship("Performer", secondary='performer_genre', back_populates="genres")
 
 
@@ -33,6 +35,7 @@ class Album(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(255), nullable=False)
     year = Column(Numeric(4, 0), nullable=False)
+
     performers = relationship("Performer", secondary='performer_album', back_populates="albums")
 
 
@@ -50,6 +53,7 @@ class Track(Base):
     title = Column(String(255), nullable=False)
     duration = Column(Integer, nullable=False)
     album_id = Column(Integer, ForeignKey('albums.id'))
+
     album = relationship("Album", backref='tracks')
     collections = relationship("Collection", secondary='track_collection', back_populates="tracks")
 
@@ -59,6 +63,7 @@ class Collection(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(255), nullable=False)
     year = Column(Numeric(4, 0), nullable=False)
+
     tracks = relationship("Track", secondary='track_collection', back_populates="collections")
 
 class TrackCollection(Base):
