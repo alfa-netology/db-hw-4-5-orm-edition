@@ -8,7 +8,6 @@ Base = declarative_base()
 class Performer(Base):
     __tablename__ = 'performers'
 
-    extend_existing = True
     id = Column(Integer, primary_key=True)
     name = Column(String(200), nullable=False, unique=True)
     genres = relationship("Genre", secondary='performer_genre', back_populates="performers")
@@ -25,8 +24,7 @@ class Genre(Base):
 performer_genre = Table(
     'performer_genre', Base.metadata,
     Column('genre_id', Integer, ForeignKey('genres.id')),
-    Column('performer_id', Integer, ForeignKey('performers.id')),
-    extend_existing=True,
+    Column('performer_id', Integer, ForeignKey('performers.id'))
 )
 
 class Album(Base):
