@@ -1,4 +1,5 @@
 from sqlalchemy import or_, distinct, func
+from sqlalchemy.orm import joinedload
 
 from data.dbase_setup import Performer, Genre, Album, Track, Collection
 from tools.time_converter import milliseconds_to_time, time_to_milliseconds
@@ -47,15 +48,24 @@ def number_4(session):
 def number_5(session):
     # количество исполнителей в каждом жанре (сортировка по количеству);
     print('\nКоличество исполнителей в каждом жанре:')
-    result = session.query(
-        Genre,
-        func.count(Performer.id).label('count')).\
-        join(Genre.performers).\
-        order_by(func.count(Performer.id).desc()).\
-        group_by(Genre.id)
+    # result = session.query(
+    #     Genre,
+    #     func.count(Performer.id).label('count')).\
+    #     join(Genre.performers).\
+    #     order_by(func.count(Performer.id).desc()).\
+    #     group_by(Genre.id)
+    r = session.query(Genre).options(joinedload(Genre.performers)).column_descriptions
+    result = session.query(Genre).join(Genre.performers)
+
+    print(result)
+            # order_by(func.count(Performer.id).desc()). \
+            # group_by(Genre.id)
 
     for record in result:
-        print(f"{record.Genre.title:.<20}[ {record.count} ]")
+        print(f"{record.Genre.title}, {record.id}")
+
+    # for record in result:
+    #     print(f"{record.Genre.title:.<20}[ {record.count} ]")
 
     # количество треков, вошедших в альбомы 2019-2020 годов;
     print('\nКоличество треков, вошедших в альбомы 2019-2020 годов:')

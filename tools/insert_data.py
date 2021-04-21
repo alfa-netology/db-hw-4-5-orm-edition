@@ -48,8 +48,11 @@ def insert(session):
 
         for i in range(random.randrange(10, 15, 1)):
             track_id = random.sample(range(0, max_track_id), 1)[0]
-            existing_track_id = session.query(TrackCollection).filter_by(track_id=track_id).first()
+            existing_record = session.query(TrackCollection).\
+                filter_by(track_id=track_id, collection_id=collection_id).\
+                first()
+
             session.commit()
-            if existing_track_id is None:
+            if existing_record is None:
                 session.add(TrackCollection(track_id=track_id, collection_id=collection_id))
                 session.commit()

@@ -11,7 +11,7 @@ class Performer(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(200), nullable=False, unique=True)
 
-    genres = relationship("Genre", secondary='performer_genre', back_populates="performers")
+    genres = relationship("Genre", secondary='performer_genre', backref="performers")
     albums = relationship("Album", secondary='performer_album', back_populates="performers")
 
 class Genre(Base):
@@ -20,13 +20,14 @@ class Genre(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(200), nullable=False, unique=True)
 
-    performers = relationship("Performer", secondary='performer_genre', back_populates="genres")
+    # performers = relationship("Performer", secondary='performer_genre', back_populates="genres")
 
 
 performer_genre = Table(
     'performer_genre', Base.metadata,
+    Column('performer_id', Integer, ForeignKey('performers.id')),
     Column('genre_id', Integer, ForeignKey('genres.id')),
-    Column('performer_id', Integer, ForeignKey('performers.id'))
+
 )
 
 class Album(Base):
