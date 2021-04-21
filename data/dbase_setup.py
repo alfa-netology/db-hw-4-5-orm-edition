@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, PrimaryKeyConstraint, Numeric, Table
+from sqlalchemy import Column, ForeignKey, Integer, String, PrimaryKeyConstraint, Numeric
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -8,7 +8,6 @@ Base = declarative_base()
 class Performer(Base):
     __tablename__ = 'performers'
 
-    extend_existing = True
     id = Column(Integer, primary_key=True)
     name = Column(String(200), nullable=False, unique=True)
 
@@ -23,13 +22,13 @@ class Genre(Base):
 
     # performers = relationship("Performer", secondary='performer_genre', back_populates="genres")
 
+class PerformerGenre(Base):
+    __tablename__ = 'performer_genre'
+    __table_args__ = (PrimaryKeyConstraint('genre_id', 'performer_id'),)
 
-performer_genre = Table(
-    'performer_genre', Base.metadata,
     Column('performer_id', Integer, ForeignKey('performers.id')),
     Column('genre_id', Integer, ForeignKey('genres.id')),
     Column('performer_id', Integer, ForeignKey('performers.id')),
-    extend_existing=True,
 )
 
 class Album(Base):
@@ -41,13 +40,12 @@ class Album(Base):
 
     performers = relationship("Performer", secondary='performer_album', back_populates="albums")
 
+class PerformerAlbum(Base):
+    __tablename__ = 'performer_album'
+    __table_args__ = (PrimaryKeyConstraint('album_id', 'performer_id'),)
 
-performer_album = Table(
-    'performer_album', Base.metadata,
-    Column('album_id', Integer, ForeignKey('albums.id')),
-    Column('performer_id', Integer, ForeignKey('performers.id'))
-)
-
+    album_id = Column(Integer, ForeignKey('albums.id'))
+    performer_id = Column(Integer, ForeignKey('performers.id'))
 
 class Track(Base):
     __tablename__ = 'tracks'

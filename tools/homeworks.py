@@ -1,7 +1,8 @@
 from sqlalchemy import or_, distinct, func
 from sqlalchemy.orm import joinedload
 
-from data.dbase_setup import Performer, Genre, Album, Track, Collection
+from data.dbase_setup import Performer, Genre, PerformerGenre, Album, PerformerAlbum, Track, TrackCollection, \
+    Collection
 from tools.time_converter import milliseconds_to_time, time_to_milliseconds
 
 def number_4(session):
