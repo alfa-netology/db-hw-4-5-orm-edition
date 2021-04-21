@@ -12,7 +12,7 @@ class Performer(Base):
     name = Column(String(200), nullable=False, unique=True)
 
     genres = relationship("Genre", secondary='performer_genre', backref="performers")
-    albums = relationship("Album", secondary='performer_album', back_populates="performers")
+    albums = relationship("Album", secondary='performer_album', backref="performers")
 
 class Genre(Base):
     __tablename__ = 'genres'
@@ -20,16 +20,12 @@ class Genre(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(200), nullable=False, unique=True)
 
-    # performers = relationship("Performer", secondary='performer_genre', back_populates="genres")
-
 class PerformerGenre(Base):
     __tablename__ = 'performer_genre'
     __table_args__ = (PrimaryKeyConstraint('genre_id', 'performer_id'),)
 
-    Column('performer_id', Integer, ForeignKey('performers.id')),
-    Column('genre_id', Integer, ForeignKey('genres.id')),
-    Column('performer_id', Integer, ForeignKey('performers.id')),
-)
+    genre_id = Column(Integer, ForeignKey('genres.id'))
+    performer_id = Column(Integer, ForeignKey('performers.id'))
 
 class Album(Base):
     __tablename__ = 'albums'
@@ -37,8 +33,6 @@ class Album(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(255), nullable=False)
     year = Column(Numeric(4, 0), nullable=False)
-
-    performers = relationship("Performer", secondary='performer_album', back_populates="albums")
 
 class PerformerAlbum(Base):
     __tablename__ = 'performer_album'
